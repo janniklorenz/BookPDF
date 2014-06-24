@@ -35,14 +35,23 @@
     self.delegate = self;
     self.dataSource = self;
     
+    [self initPDFDocumentWithURL: [NSURL URLWithString:path] ];
+    [self initNavigationBar];
+    [self initToolbar];
+    [self initTapRecognizer];
+    [self initFirstPage];
     
-    // init - PDF Document
-    NSURL *pdfUrl = [NSURL URLWithString:path];
-    _PDFDocument = CGPDFDocumentCreateWithURL((__bridge CFURLRef)pdfUrl);
+    return self;
+}
+
+/** set up The PDF Document and cal total Pages */
+- (void)initPDFDocumentWithURL:(NSURL *)url {
+    _PDFDocument = CGPDFDocumentCreateWithURL((__bridge CFURLRef)url);
     _totalPages = (int)CGPDFDocumentGetNumberOfPages(_PDFDocument);
-    
-    
-    // init - Nav Bar
+}
+
+/** inits the Navigation Bar */
+- (void)initNavigationBar {
     _navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, 44)];
     _navigationBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _navigationBar.barTintColor = [UIColor whiteColor];
@@ -56,10 +65,10 @@
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"backArrow.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(exit:)];
     _navItem.leftBarButtonItem = doneButton;
     _navigationBar.items = @[ _navItem ];
-    
-    
-    
-    // init - tool Bar
+}
+
+/** inits the Toolbar */
+- (void)initToolbar {
     _toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-THUMBNAIL_BAR_HEIGHT, self.view.frame.size.width, THUMBNAIL_BAR_HEIGHT)];
     _toolBar.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin);
     _toolBar.barTintColor = [UIColor whiteColor];
@@ -67,9 +76,11 @@
     
     [self.view addSubview:_toolBar];
     
-    
-    
-    // init - toolbar items
+    [self initToolbarItems];
+}
+
+/** inits the Toolbar Items */
+- (void)initToolbarItems {
     UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
     NSMutableArray *items = [NSMutableArray arrayWithObjects:flexSpace, nil];
     
@@ -84,24 +95,22 @@
     
     [items addObject:flexSpace];
     self.toolBar.items = (NSArray *)items;
-    
-    
-    
-    // init - Tap Recognizer
+}
+
+/** inits the Tap Recognizer */
+- (void)initTapRecognizer {
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeState:)];
     gestureRecognizer.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:gestureRecognizer];
-    
-    
-    // init - Page View Controller
+}
+
+/** inits the First Page */
+- (void)initFirstPage {
     _currentIndex = 1;
     BookPDFPage *a = [self getBookPDFPageForPage:_currentIndex];
     NSArray *viewControllers = [NSArray arrayWithObjects:a, nil];
     [self setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
     [self updateUI];
-    
-    
-    return self;
 }
 
 
