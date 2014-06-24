@@ -7,6 +7,8 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {BookPDFStyleLight, BookPDFStyleDark} BookPDFStyle;
+
 @class BookPDFPage;
 
 @interface BookPDF : UIPageViewController <UIPageViewControllerDelegate, UIPageViewControllerDataSource, UINavigationBarDelegate>
@@ -42,6 +44,9 @@
 
 /* Hides/ Shows the Interface Controls */
 @property (nonatomic) BOOL controlsHidden;
+
+/* Interface Style */
+@property (nonatomic) BookPDFStyle style;
 
 
 

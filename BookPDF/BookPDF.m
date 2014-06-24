@@ -43,6 +43,8 @@
     [self initTapRecognizer];
     [self initFirstPage];
     
+    self.style = BookPDFStyleLight;
+    
     return self;
 }
 
@@ -140,12 +142,6 @@
 
 
 #pragma mark - View lifecycle
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    self.view.backgroundColor = [UIColor whiteColor];
-}
 
 - (void)viewDidAppear:(BOOL)animated {
     [self reorderViews];
@@ -380,6 +376,25 @@
     [self updateUI];
 }
 
+- (void)setStyle:(BookPDFStyle)style {
+    switch (style) {
+        case BookPDFStyleLight: {
+            _navigationBar.barTintColor = [UIColor whiteColor];
+            _toolBar.barTintColor = [UIColor whiteColor];
+            self.view.backgroundColor = [UIColor whiteColor];
+            _navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor blackColor]};
+            break;
+        }
+        case BookPDFStyleDark: {
+            _navigationBar.barTintColor = [UIColor blackColor];
+            _toolBar.barTintColor = [UIColor blackColor];
+            self.view.backgroundColor = [UIColor blackColor];
+            _navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+            break;
+        }
+    }
+    _style = style;
+}
 
 
 
