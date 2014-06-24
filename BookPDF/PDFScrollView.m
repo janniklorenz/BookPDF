@@ -100,7 +100,7 @@
     CGRect pageRect = CGPDFPageGetBoxRect(_PDFPage, kCGPDFMediaBox);
     
     // Set Up Scale
-    _PDFScale = [self getScale];
+    if (_PDFScale == 0) _PDFScale = [self getScale];
     
     pageRect.size = CGSizeMake(pageRect.size.width * _PDFScale, pageRect.size.height * _PDFScale);
     
@@ -197,51 +197,52 @@
 }
 
 
-#pragma mark -
-#pragma mark UIScrollView delegate methods
-
-/**
- A UIScrollView delegate callback, called when the user starts zooming.
- Return the current TiledPDFView.
- */
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    return self.tiledPDFView;
-}
-
-/**
- A UIScrollView delegate callback, called when the user begins zooming.
- When the user begins zooming, remove the old TiledPDFView and set the current TiledPDFView to be the old view so we can create a new TiledPDFView when the zooming ends.
- */
-- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
-    // Remove back tiled view.
-    [self.oldTiledPDFView removeFromSuperview];
-    
-    // Set the current TiledPDFView to be the old view.
-    self.oldTiledPDFView = self.tiledPDFView;
-    [self addSubview:self.oldTiledPDFView];
-}
-
-
-/**
- A UIScrollView delegate callback, called when the user stops zooming.
- When the user stops zooming, create a new TiledPDFView based on the new zoom level and draw it on top of the old TiledPDFView.
- */
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(double)scale {
-    // Set the new scale factor for the TiledPDFView.
-    _PDFScale *= scale;
-    
-    // Calculate the new frame for the new TiledPDFView.
-    CGRect pageRect = CGPDFPageGetBoxRect(_PDFPage, kCGPDFMediaBox);
-    pageRect.size = CGSizeMake(pageRect.size.width*_PDFScale, pageRect.size.height*_PDFScale);
-    
-    // Create a new TiledPDFView based on new frame and scaling.
-    TiledPDFView *tiledPDFView = [[TiledPDFView alloc] initWithFrame:pageRect scale:_PDFScale];
-    [tiledPDFView setPage:_PDFPage];
-    
-    // Add the new TiledPDFView to the PDFScrollView.
-    [self addSubview:tiledPDFView];
-    self.tiledPDFView = tiledPDFView;
-}
+//#pragma mark -
+//#pragma mark UIScrollView delegate methods
+//
+///**
+// A UIScrollView delegate callback, called when the user starts zooming.
+// Return the current TiledPDFView.
+// */
+//- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+//    return self.tiledPDFView;
+//}
+//
+///**
+// A UIScrollView delegate callback, called when the user begins zooming.
+// When the user begins zooming, remove the old TiledPDFView and set the current TiledPDFView to be the old view so we can create a new TiledPDFView when the zooming ends.
+// */
+//- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
+//    // Remove back tiled view.
+//    [self.oldTiledPDFView removeFromSuperview];
+//    
+//    // Set the current TiledPDFView to be the old view.
+//    self.oldTiledPDFView = self.tiledPDFView;
+//    [self addSubview:self.oldTiledPDFView];
+//}
+//
+//
+///**
+// A UIScrollView delegate callback, called when the user stops zooming.
+// When the user stops zooming, create a new TiledPDFView based on the new zoom level and draw it on top of the old TiledPDFView.
+// */
+//- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(double)scale {
+//    // Set the new scale factor for the TiledPDFView.
+//    _PDFScale *= scale;
+//  
+//    
+//    // Calculate the new frame for the new TiledPDFView.
+//    CGRect pageRect = CGPDFPageGetBoxRect(_PDFPage, kCGPDFMediaBox);
+//    pageRect.size = CGSizeMake(pageRect.size.width*_PDFScale, pageRect.size.height*_PDFScale);
+//    
+//    // Create a new TiledPDFView based on new frame and scaling.
+//    TiledPDFView *tiledPDFView = [[TiledPDFView alloc] initWithFrame:pageRect scale:_PDFScale];
+//    [tiledPDFView setPage:_PDFPage];
+//    
+//    // Add the new TiledPDFView to the PDFScrollView.
+//    [self addSubview:tiledPDFView];
+//    self.tiledPDFView = tiledPDFView;
+//}
 
 
 @end

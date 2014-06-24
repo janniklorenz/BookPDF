@@ -95,7 +95,10 @@
     int add = _totalPages/max;
     
     int i = 0;
-    for (int page = 1; i < max; page+=add) { [items addObject: [self getThubnailButtonForPage:page] ]; i++; }
+    for (int page = 1; i < max; page+=add) {
+        [items addObject: [self getThubnailButtonForPage:page] ];
+        i++;
+    }
     if (THUMBNAIL_BAR_COUNT < _totalPages) [items addObject: [self getThubnailButtonForPage:_totalPages] ];
     
     [items addObject:flexSpace];
@@ -106,6 +109,20 @@
 - (void)initTapRecognizer {
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeState:)];
     gestureRecognizer.cancelsTouchesInView = NO;
+    
+    // ignore touches when change page
+    [gestureRecognizer requireGestureRecognizerToFail:self.gestureRecognizers.firstObject];
+    
+    // ignore touches in nav bar
+    UITapGestureRecognizer *emptyNav = [[UITapGestureRecognizer alloc] initWithTarget:nil action:nil];
+    [_navigationBar addGestureRecognizer:emptyNav];
+    [gestureRecognizer requireGestureRecognizerToFail:emptyNav];
+    
+    // ignore touches in toolbar
+    UITapGestureRecognizer *emptyTool = [[UITapGestureRecognizer alloc] initWithTarget:nil action:nil];
+    [_toolBar addGestureRecognizer:emptyTool];
+    [gestureRecognizer requireGestureRecognizerToFail:emptyTool];
+    
     [self.view addGestureRecognizer:gestureRecognizer];
 }
 
@@ -285,12 +302,13 @@
 /** Trigges a switchPage event with Tag */
 - (void)switchTo:(id)sender {
     self.currentIndex = (int)[sender tag];
-    self.controlsHidden = NO;
+    [self reorderViews];
 }
 
 /** Invert controlsHidden */
 - (void)changeState:(id)sender {
     self.controlsHidden = !_controlsHidden;
+    [self reorderViews];
 }
 
 /** Dismiss View Controller */
@@ -307,12 +325,12 @@
 
 /* Hides/ Shows the Interface Controls */
 - (void)setControlsHidden:(BOOL)controlsHidden {
+    [[UIApplication sharedApplication] setStatusBarHidden:controlsHidden withAnimation:UIStatusBarAnimationFade];
     if (controlsHidden) {
         [UIView beginAnimations:@"hide" context:NULL];
         [UIView setAnimationDuration:HIDE_ANIMATION_DURATION];
         [_navigationBar setAlpha:0.0];
         [_toolBar setAlpha:0.0];
-        [[UIApplication sharedApplication] setStatusBarHidden:YES];
         [UIView commitAnimations];
     }
     else {
@@ -320,7 +338,6 @@
         [UIView setAnimationDuration:HIDE_ANIMATION_DURATION];
         [_navigationBar setAlpha:1.0];
         [_toolBar setAlpha:1.0];
-        [[UIApplication sharedApplication] setStatusBarHidden:NO];
         [UIView commitAnimations];
     }
     _controlsHidden = controlsHidden;
@@ -412,6 +429,20 @@
 }
 
 
+
+
+
+
+
+
+
+
+
+//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+//    NSLog(@"%@", gestureRecognizer);
+//    
+//    return NO;
+//}
 
 
 

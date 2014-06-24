@@ -13,6 +13,8 @@
 @implementation BookPDFPage
 
 
+#pragma mark - inits
+
 - (id)initWithPDF:(CGPDFDocumentRef)pdf atPage:(int)p bookStyle:(BOOL)book andFrame:(CGRect)frame {
     _PDFDocument = pdf;
     _book = book;
@@ -29,12 +31,6 @@
     
     return self;
 }
-
-
-
-
-
-#pragma mark - set up PDF Viewer
 
 - (void)initPDFViewer {
     UIInterfaceOrientation ori = [[UIApplication sharedApplication] statusBarOrientation];
@@ -55,7 +51,7 @@
         _pdfScrollView.minimumZoomScale = MINZOOMSCALE;
         _pdfScrollView.maximumZoomScale = MAXZOOMSCALE;
         
-        _pdfScrollView.userInteractionEnabled = YES;
+        _pdfScrollView.userInteractionEnabled = NO;
         _pdfScrollView.bounces = NO;
         
         _pdfScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
