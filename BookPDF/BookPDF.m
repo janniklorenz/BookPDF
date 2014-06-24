@@ -8,7 +8,7 @@
 #import "BookPDF.h"
 #import "BookPDFPage.h"
 
-#define THUMBNAIL_BAR_COUNT 10
+#define THUMBNAIL_BAR_COUNT 8
 #define THUMBNAIL_BAR_HEIGHT 100
 
 #define HIDE_ANIMATION_DURATION 0.6
@@ -131,6 +131,7 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    // TODO
     [self.view bringSubviewToFront:_navigationBar];
     [self.view bringSubviewToFront:_toolBar];
 }
@@ -176,6 +177,10 @@
 #pragma mark - UIPageViewControllerDelegate Methods
 
 - (UIPageViewControllerSpineLocation)pageViewController:(UIPageViewController *)pageViewController spineLocationForInterfaceOrientation:(UIInterfaceOrientation)orientation {
+    
+    // TODO
+    [self.view bringSubviewToFront:_navigationBar];
+    [self.view bringSubviewToFront:_toolBar];
     
     int i = [[self.viewControllers objectAtIndex:0] page] + 1;
     
@@ -224,6 +229,7 @@
 }
 
 - (void)pageViewController:(UIPageViewController *)pvc didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed {
+    // TODO
     [self.view bringSubviewToFront:_navigationBar];
     [self.view bringSubviewToFront:_toolBar];
 }
