@@ -1,12 +1,12 @@
 BookPDF
 =======
 
-# Functions
+## Functions
 iOS 7 iBooks like PDF Viewer with Thumbnail Bar
 * Thumbnail Bar
 * ...
 
-# Code
+## Code
 
 ```initWithPDFAtURL```
 ```
@@ -18,6 +18,6 @@ BookPDF *page = [[BookPDF alloc] initWithPDFAtURL:url];
 
 
 
-# Demo
+## Demo
 
 ![alt text](https://raw.githubusercontent.com/janniklorenz/BookPDF/Alpha/Demo/Example%20Landscape%201.png "Example Landscape 1")
