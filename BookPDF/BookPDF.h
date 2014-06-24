@@ -16,7 +16,7 @@
 #pragma mark - PDF
 
 /** PDF Document */
-@property (readwrite) CGPDFDocumentRef PDFDocument;
+@property (readonly) CGPDFDocumentRef PDFDocument;
 
 /** The Current Index, may not correct if to Pages, <<Starts with 1>> */
 @property (nonatomic) int currentIndex;
@@ -31,13 +31,13 @@
 #pragma mark - Interface Stuff
 
 /** UINavigation Bar */
-@property (readwrite) UINavigationBar *navigationBar;
+@property (readonly) UINavigationBar *navigationBar;
 
 /** UIToolbar, used for fast Page Switch */
-@property (readwrite) UIToolbar *toolBar;
+@property (readonly) UIToolbar *toolBar;
 
 /** UINavigation Item */
-@property (readwrite) UINavigationItem *navItem;
+@property (readonly) UINavigationItem *navItem;
 
 
 /* Hides/ Shows the Interface Controls */

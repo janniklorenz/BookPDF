@@ -38,18 +38,18 @@
 #pragma mark - PDF (Page)
 
 /** PDF Document */
-@property (readwrite) CGPDFDocumentRef PDFDocument;
+@property (readonly) CGPDFDocumentRef PDFDocument;
 
 
 /** PDF Page Scroll View */
-@property (readwrite) PDFScrollView *pdfScrollView;
+@property (readonly) PDFScrollView *pdfScrollView;
 
 
 /** Current Page <<Starts with 1>> */
 @property (readonly) int page;
 
 /** PDF Pages Count */
-@property (readwrite) int maxPages;
+@property (readonly) int maxPages;
 
 
 /** book, true if Double Sided */
