@@ -29,18 +29,20 @@
 
 - (id)initWithPDFAtPath:(NSString *)path {
     
+    // init - self
     self = [super initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
     self.doubleSided = NO;
     self.delegate = self;
     self.dataSource = self;
     
+    
+    // init - PDF Document
     NSURL *pdfUrl = [NSURL URLWithString:path];
     _PDFDocument = CGPDFDocumentCreateWithURL((__bridge CFURLRef)pdfUrl);
     _totalPages = (int)CGPDFDocumentGetNumberOfPages(_PDFDocument);
     
     
-    
-    // --- Nav Bar ---
+    // init - Nav Bar
     _navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, 44)];
     _navigationBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _navigationBar.barTintColor = [UIColor whiteColor];
@@ -57,7 +59,7 @@
     
     
     
-    // --- Nav Bar ---
+    // init - tool Bar
     _toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-THUMBNAIL_BAR_HEIGHT, self.view.frame.size.width, THUMBNAIL_BAR_HEIGHT)];
     _toolBar.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin);
     _toolBar.barTintColor = [UIColor whiteColor];
@@ -67,9 +69,9 @@
     
     
     
+    // init - toolbar items
     UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
     NSMutableArray *items = [NSMutableArray arrayWithObjects:flexSpace, nil];
-    
     
     int max = THUMBNAIL_BAR_COUNT - 1;
     if (max > _totalPages) max = _totalPages;
@@ -85,39 +87,23 @@
     
     
     
-    // Tap Recognizer
+    // init - Tap Recognizer
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeState:)];
     gestureRecognizer.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:gestureRecognizer];
     
     
+    // init - Page View Controller
     _currentIndex = 1;
     BookPDFPage *a = [self getBookPDFPageForPage:_currentIndex];
-    
     NSArray *viewControllers = [NSArray arrayWithObjects:a, nil];
     [self setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
-    
-    [self updateUIWithPage:_currentIndex];
+    [self updateUI];
     
     
     return self;
 }
 
-- (UIBarButtonItem *)getThubnailButtonForPage:(int)i {
-    UIImage *thumbnail = [self getThumbnailForPage:i];
-    thumbnail = [UIImage imageWithCGImage:[thumbnail CGImage] scale:(thumbnail.scale * thumbnail.size.height/(THUMBNAIL_BAR_HEIGHT-4)) orientation:(thumbnail.imageOrientation)];
-    
-    UIButton *thumbnailButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    thumbnailButton.bounds = CGRectMake( 0, 0, thumbnail.size.width, thumbnail.size.height );
-    [thumbnailButton setImage:thumbnail forState:UIControlStateNormal];
-    [thumbnailButton addTarget:self action:@selector(switchTo:) forControlEvents:UIControlEventTouchUpInside];
-    thumbnailButton.tag = i;
-    
-    thumbnailButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    thumbnailButton.layer.borderWidth = 0.5;
-    
-    return [[UIBarButtonItem alloc] initWithCustomView:thumbnailButton];
-}
 
 
 
@@ -131,11 +117,14 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    // TODO
+    [self reorderViews];
+}
+
+/** brings UIControls back to front */
+- (void)reorderViews {
     [self.view bringSubviewToFront:_navigationBar];
     [self.view bringSubviewToFront:_toolBar];
 }
-
 
 
 
@@ -156,17 +145,11 @@
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
     int i = [(BookPDFPage *)viewController page] - 1;
-    
-    if (i%2 == 0 || self.viewControllers.count == 1) [self updateUIWithPage:i];
-    
     return [self getBookPDFPageForPage:i];
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
     int i = [(BookPDFPage *)viewController page] + 1;
-    
-    if (i%2 == 0 || self.viewControllers.count == 1) [self updateUIWithPage:i];
-    
     return [self getBookPDFPageForPage:i];
 }
 
@@ -178,9 +161,7 @@
 
 - (UIPageViewControllerSpineLocation)pageViewController:(UIPageViewController *)pageViewController spineLocationForInterfaceOrientation:(UIInterfaceOrientation)orientation {
     
-    // TODO
-    [self.view bringSubviewToFront:_navigationBar];
-    [self.view bringSubviewToFront:_toolBar];
+    [self reorderViews];
     
     int i = [[self.viewControllers objectAtIndex:0] page] + 1;
     
@@ -229,9 +210,18 @@
 }
 
 - (void)pageViewController:(UIPageViewController *)pvc didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed {
-    // TODO
-    [self.view bringSubviewToFront:_navigationBar];
-    [self.view bringSubviewToFront:_toolBar];
+    [self reorderViews];
+    
+    // get smallest
+    int i, i1, i2;
+    i1 = [(BookPDFPage *)self.viewControllers.firstObject page];
+    i2 = [(BookPDFPage *)self.viewControllers.lastObject page];
+    i = i1;
+    if (i1 > i2) i = i2;
+    
+    _currentIndex = i;
+    
+    [self updateUI];
 }
 
 
@@ -241,9 +231,9 @@
 #pragma mark -  Update the UI
 
 /** Helper Function, used to Update Interface */
-- (void)updateUIWithPage:(int)i {
+- (void)updateUI {
     
-    i = [self correctPage:i];
+    int i = [self correctPage: _currentIndex ];
     
     if (self.viewControllers.count == 1) _navItem.title = [NSString stringWithFormat:@"%i von %i", i, _totalPages];
     else {
@@ -267,7 +257,7 @@
 /** Helper Function, correct Page Index For UI */
 - (int)correctPage:(int)i {
     if (i > _totalPages) return _totalPages;
-    else if (i <= 0) return 0;
+    else if (i < 1) return 0;
     else return i;
 }
 
@@ -324,8 +314,11 @@
 
 /** switch currend page Manually */
 - (void)setCurrentIndex:(int)i {
-    const int old = [(BookPDFPage *)self.viewControllers.firstObject page];
-    if (self.viewControllers.count > 1) [(BookPDFPage *)self.viewControllers.lastObject page];
+    
+    // Correct if landscape and not the left one
+    if (i%2 == 1 && self.viewControllers.count == 2) i--;
+    
+    const int old = _currentIndex;
     
     UIPageViewControllerNavigationDirection dir = UIPageViewControllerNavigationDirectionReverse;
     BOOL animated = YES;
@@ -352,7 +345,8 @@
         
         [self setViewControllers:viewControllers direction:dir animated:animated completion:NULL];
     }
-    [self updateUIWithPage:i];
+    _currentIndex = i;
+    [self updateUI];
 }
 
 
@@ -386,6 +380,22 @@
     return finalImage;
 }
 
+/** Returns a Thumbnail Button */
+- (UIBarButtonItem *)getThubnailButtonForPage:(int)i {
+    UIImage *thumbnail = [self getThumbnailForPage:i];
+    thumbnail = [UIImage imageWithCGImage:[thumbnail CGImage] scale:(thumbnail.scale * thumbnail.size.height/(THUMBNAIL_BAR_HEIGHT-4)) orientation:(thumbnail.imageOrientation)];
+    
+    UIButton *thumbnailButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    thumbnailButton.bounds = CGRectMake( 0, 0, thumbnail.size.width, thumbnail.size.height );
+    [thumbnailButton setImage:thumbnail forState:UIControlStateNormal];
+    [thumbnailButton addTarget:self action:@selector(switchTo:) forControlEvents:UIControlEventTouchUpInside];
+    thumbnailButton.tag = i;
+    
+    thumbnailButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    thumbnailButton.layer.borderWidth = 0.5;
+    
+    return [[UIBarButtonItem alloc] initWithCustomView:thumbnailButton];
+}
 
 
 

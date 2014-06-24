@@ -20,7 +20,7 @@
     _page = p;
     
     self.view.layer.borderWidth = 1;
-    self.view.layer.borderColor = [UIColor grayColor].CGColor;
+    self.view.layer.borderColor = [UIColor lightGrayColor].CGColor;
 
     if (  ( (_page <= -1) || (_page%2 == 0 && _page > _maxPages) ) && book  ) return nil;
     else if (  ( _page <= 0 || _page > _maxPages ) && !book ) return nil;
