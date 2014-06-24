@@ -23,8 +23,10 @@
 }
 
 - (id)initWithData:(NSData *)data {
-    NSLog(@"[ERROR] initWithData not implementet");
-    return nil;
+    NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent: [NSString stringWithFormat:@"cache%i.pdf", (int)data.hash] ];
+    [data writeToFile:tempPath atomically:YES];
+    tempPath = [tempPath stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
+    return [self initWithPDFAtURL: [NSURL fileURLWithPath:tempPath] ];
 }
 
 - (id)initWithPDFAtPath:(NSString *)path {
@@ -48,6 +50,9 @@
 - (void)initPDFDocumentWithURL:(NSURL *)url {
     _PDFDocument = CGPDFDocumentCreateWithURL((__bridge CFURLRef)url);
     _totalPages = (int)CGPDFDocumentGetNumberOfPages(_PDFDocument);
+    if (_totalPages == 0) {
+        NSLog(@"[ERROR] Bad PDF");
+    };
 }
 
 /** inits the Navigation Bar */
