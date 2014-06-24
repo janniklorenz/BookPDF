@@ -15,23 +15,21 @@
 
 @implementation ViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 
 - (IBAction)changePDF:(id)sender {
-    NSLog(@"%i", (int)[sender tag]);
+    
+//    NSString *path = [[NSBundle mainBundle] pathForResource:@"demo" ofType:@"pdf"];
+//    NSData *dat = [NSData dataWithContentsOfFile:path];
+//    BookPDF *page = [[BookPDF alloc] initWithData:dat];
+//    [self presentViewController:page animated:YES completion:NULL];
+    
+//    NSString *path = [[NSBundle mainBundle] pathForResource:@"demo" ofType:@"pdf"];
+//    NSURL *url = [NSURL fileURLWithPath:path];
+//    BookPDF *page = [[BookPDF alloc] initWithPDFAtURL:url];
+//    [self presentViewController:page animated:YES completion:NULL];
+    
     NSString *path = [[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"demo%i", (int)[sender tag]] ofType:@"pdf"];
     NSURL *url = [NSURL fileURLWithPath:path];
-    
     BookPDF *page = [[BookPDF alloc] initWithPDFAtURL:url];
     [self presentViewController:page animated:YES completion:NULL];
 }

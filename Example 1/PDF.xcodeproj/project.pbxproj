@@ -75,6 +75,7 @@
 		C47333981958F898003975D8 /* PDFScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFScrollView.m; sourceTree = "<group>"; };
 		C47333991958F898003975D8 /* TiledPDFView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TiledPDFView.h; sourceTree = "<group>"; };
 		C473339A1958F898003975D8 /* TiledPDFView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TiledPDFView.m; sourceTree = "<group>"; };
+		C4AF00351959A686008E161B /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +105,7 @@
 		C414A20A1958DB8D00B28EBF = {
 			isa = PBXGroup;
 			children = (
+				C4AF00351959A686008E161B /* README.md */,
 				C414A21C1958DB8D00B28EBF /* PDF */,
 				C414A23E1958DB8E00B28EBF /* PDFTests */,
 				C414A2151958DB8D00B28EBF /* Frameworks */,
