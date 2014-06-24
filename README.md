@@ -8,7 +8,7 @@ iOS 7 iBooks like PDF Viewer with Thumbnail Bar
 
 ## Code
 
-```initWithPDFAtURL```
+  initWithPDFAtURL:
 ```
 NSString *path = [[NSBundle mainBundle] pathForResource:@"demo1" ofType:@"pdf"];
 NSURL *url = [NSURL fileURLWithPath:path];
