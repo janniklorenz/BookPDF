@@ -7,7 +7,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import "IMSDefaults.h"
+typedef void (^BookPDFActionBlock)();
 
 typedef enum {BookPDFStyleLight, BookPDFStyleDark} BookPDFStyle;
 
@@ -52,7 +52,7 @@ typedef enum {BookPDFStyleLight, BookPDFStyleDark} BookPDFStyle;
 
 
 - (void)showNavigationBar:(BOOL)show;
-@property (copy) ActionBlock closeAction;
+@property (copy) BookPDFActionBlock closeAction;
 
 
 
