@@ -44,6 +44,7 @@
     [self initFirstPage];
     
     self.style = BookPDFStyleLight;
+    self.controlsHidden = NO;
     
     return self;
 }
@@ -188,7 +189,7 @@
 
 - (UIPageViewControllerSpineLocation)pageViewController:(UIPageViewController *)pageViewController spineLocationForInterfaceOrientation:(UIInterfaceOrientation)orientation {
     
-    [self reorderViews];
+    if (!_controlsHidden) [self reorderViews];
     
     int i = [[self.viewControllers objectAtIndex:0] page] + 1;
     
@@ -298,13 +299,13 @@
 /** Trigges a switchPage event with Tag */
 - (void)switchTo:(id)sender {
     self.currentIndex = (int)[sender tag];
+    self.controlsHidden = NO;
     [self reorderViews];
 }
 
 /** Invert controlsHidden */
 - (void)changeState:(id)sender {
     self.controlsHidden = !_controlsHidden;
-    [self reorderViews];
 }
 
 /** Dismiss View Controller */
@@ -337,6 +338,7 @@
         [UIView commitAnimations];
     }
     _controlsHidden = controlsHidden;
+    [self reorderViews];
 }
 
 /** switch currend page Manually */
