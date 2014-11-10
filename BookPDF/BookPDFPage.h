@@ -6,7 +6,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AppDelegate.h"
 #import "PDFScrollView.h"
 
 @class PDFScrollView;
