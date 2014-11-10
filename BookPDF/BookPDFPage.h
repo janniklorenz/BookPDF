@@ -35,7 +35,7 @@
 
 
 
-#pragma mark - PDF (Page)
+#pragma mark - PDF (IMSPage)
 
 /** PDF Document */
 @property (readonly) CGPDFDocumentRef PDFDocument;

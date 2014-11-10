@@ -23,6 +23,7 @@
 }
 
 - (id)initWithData:(NSData *)data {
+    
     NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent: [NSString stringWithFormat:@"cache%i.pdf", (int)data.hash] ];
     [data writeToFile:tempPath atomically:YES];
     tempPath = [tempPath stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
@@ -38,7 +39,7 @@
     self.dataSource = self;
     
     [self initPDFDocumentWithURL: [NSURL URLWithString:path] ];
-    [self initNavigationBar];
+//    [self initNavigationBar];
     [self initToolbar];
     [self initTapRecognizer];
     [self initFirstPage];
@@ -59,20 +60,24 @@
 }
 
 /** inits the Navigation Bar */
-- (void)initNavigationBar {
-    _navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, 44)];
-    _navigationBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _navigationBar.barTintColor = [UIColor whiteColor];
-    _navigationBar.delegate = self;
-    _navigationBar.layer.zPosition = 100;
+- (void)showNavigationBar:(BOOL)show {
+    [_navigationBar removeFromSuperview];
     
-    [self.view addSubview:_navigationBar];
-    
-    _navItem = [[UINavigationItem alloc] init];
-    
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"backArrow.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(exit:)];
-    _navItem.leftBarButtonItem = doneButton;
-    _navigationBar.items = @[ _navItem ];
+    if (show) {
+        _navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, 44)];
+        _navigationBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        _navigationBar.barTintColor = [UIColor whiteColor];
+        _navigationBar.delegate = self;
+        _navigationBar.layer.zPosition = 100;
+        
+        [self.view addSubview:_navigationBar];
+        
+        _navItem = [[UINavigationItem alloc] init];
+        
+        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"backArrow.png"] style:UIBarButtonItemStylePlain target:self action:@selector(exit:)];
+        _navItem.leftBarButtonItem = doneButton;
+        _navigationBar.items = @[ _navItem ];
+    }
 }
 
 /** inits the Toolbar */
@@ -146,6 +151,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [self reorderViews];
+    [super viewDidAppear:animated];
 }
 
 /** brings UIControls back to front */
@@ -191,6 +197,7 @@
     
     if (!_controlsHidden) [self reorderViews];
     
+    if (self.viewControllers.count == 0) return nil;
     int i = [[self.viewControllers objectAtIndex:0] page] + 1;
     
     if ( UIInterfaceOrientationIsPortrait(orientation) ) {
@@ -310,7 +317,8 @@
 
 /** Dismiss View Controller */
 - (void)exit:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:NULL];
+    _closeAction();
+//    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 
