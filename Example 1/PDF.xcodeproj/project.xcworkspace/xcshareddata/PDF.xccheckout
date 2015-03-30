@@ -10,29 +10,29 @@
 	<string>PDF</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>2D3AA27A-B8E9-4F06-AD70-BAEEE0CE93EE</key>
+		<key>A7D7DA11ECB1F88A280CCF98036FA94BE08EECA3</key>
 		<string>https://github.com/janniklorenz/BookPDF.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Example 1/PDF.xcodeproj/project.xcworkspace</string>
+	<string>Example 1/PDF.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>2D3AA27A-B8E9-4F06-AD70-BAEEE0CE93EE</key>
+		<key>A7D7DA11ECB1F88A280CCF98036FA94BE08EECA3</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/janniklorenz/BookPDF.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>2D3AA27A-B8E9-4F06-AD70-BAEEE0CE93EE</string>
+	<string>A7D7DA11ECB1F88A280CCF98036FA94BE08EECA3</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>2D3AA27A-B8E9-4F06-AD70-BAEEE0CE93EE</string>
+			<string>A7D7DA11ECB1F88A280CCF98036FA94BE08EECA3</string>
 			<key>IDESourceControlWCCName</key>
 			<string>BookPDF</string>
 		</dict>
